@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #2E2E2E;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.spotifyexchangeregion.MainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label fx:id="infoText" text="Введите данные для смены региона" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Label>
+    <TextField fx:id="loginField" alignment="CENTER" promptText="Введите логин" style="-fx-background-color: #717171;">
+      <font>
+         <Font size="14.0" />
+      </font></TextField>
+    <PasswordField fx:id="passwordField" alignment="CENTER" promptText="Введите пароль" style="-fx-background-color: #717171;">
+      <font>
+         <Font size="14.0" />
+      </font></PasswordField>
+    <Button onAction="#onExchangeButtonClick" style="-fx-background-color: #717171;" text="Запустить" textAlignment="CENTER" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+</VBox>
