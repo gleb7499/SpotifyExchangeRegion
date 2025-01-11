@@ -38,10 +38,10 @@ public class Secrets {
     }
 
     private static class innerSecrets {
-        private Map<String, String> secretsMap;
+        private final Map<String, String> secretsMap;
 
-        innerSecrets() {
-            Map<String, String> secretsMap = new HashMap<>();
+        private innerSecrets() {
+            secretsMap = new HashMap<>();
         }
     }
 }
