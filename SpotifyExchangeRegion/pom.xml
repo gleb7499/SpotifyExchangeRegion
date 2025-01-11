@@ -121,6 +121,12 @@
             <artifactId>htmlunit</artifactId>
             <version>4.7.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.27.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -152,7 +158,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.example.spotifyexchangeregion/org.example.spotifyexchangeregion.Main
+                                org.example.spotifyexchangeregion/org.example.spotifyexchangeregion.main.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

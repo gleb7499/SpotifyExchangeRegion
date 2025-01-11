@@ -1,15 +1,16 @@
-package org.example.spotifyexchangeregion;
+package org.example.spotifyexchangeregion.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.example.spotifyexchangeregion.parsing.Parsing;
 
 import java.io.IOException;
 
 public class Main extends Application {
     public static void changeRegion(String login, String password) {
-        try(Parsing parsing = new Parsing("https://www.spotify.com/us/account/overview/")) {
+        try (final Parsing parsing = new Parsing("https://www.spotify.com/us/account/overview/")) {
             parsing.changeRegion(login, password);
         } catch (Exception e) {
             throw new RuntimeException(e);

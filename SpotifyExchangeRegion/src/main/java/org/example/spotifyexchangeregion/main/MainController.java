@@ -1,4 +1,4 @@
-package org.example.spotifyexchangeregion;
+package org.example.spotifyexchangeregion.main;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

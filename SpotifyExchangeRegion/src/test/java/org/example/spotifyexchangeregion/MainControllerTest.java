@@ -1,8 +1,8 @@
 package org.example.spotifyexchangeregion;
 
 import javafx.application.Platform;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.example.spotifyexchangeregion.main.MainController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,9 +17,6 @@ import static org.mockito.Mockito.when;
 class MainControllerTest {
 
     @Mock
-    private Label infoText;
-
-    @Mock
     private TextField loginField;
 
     @Mock
@@ -28,6 +25,16 @@ class MainControllerTest {
     @InjectMocks
     private MainController mainController;
 
+    /**
+     * Инициализация Toolkit для использования JavaFX-компонентов в JUnit-тестах.
+     * <p>
+     * JUnit-тесты запускаются не в потоке АРТ, а в отдельном потоке, поэтому для использования
+     * JavaFX-компонентов необходимо explicit-инициализировать Toolkit. Это делается
+     * с помощью Platform.startup(Runnable), который инициализирует Toolkit.
+     * <p>
+     * Это необходимо, потому что в MainController используется JavaFX-компонент TextField,
+     * который использует Toolkit.
+     */
     @BeforeAll
     public static void initToolkit() {
         Platform.startup(() -> {
