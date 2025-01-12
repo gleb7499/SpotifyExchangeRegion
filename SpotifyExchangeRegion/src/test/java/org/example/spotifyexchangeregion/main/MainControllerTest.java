@@ -1,8 +1,7 @@
-package org.example.spotifyexchangeregion;
+package org.example.spotifyexchangeregion.main;
 
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
-import org.example.spotifyexchangeregion.main.MainController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -5,13 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.spotifyexchangeregion.parsing.Parsing;
+import org.example.spotifyexchangeregion.models.Account;
 
 import java.io.IOException;
 
 public class Main extends Application {
-    public static void changeRegion(String login, String password) {
+    public static void changeRegion(Account account) {
         try (final Parsing parsing = new Parsing("https://www.spotify.com/us/account/overview/")) {
-            parsing.changeRegion(login, password);
+            parsing.changeRegion(account);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

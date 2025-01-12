@@ -36,7 +36,7 @@ public class MainController {
 
     private void startExchange() {
         try {
-            Main.changeRegion(account.getLogin(), account.getPassword());
+            Main.changeRegion(account);
         } catch (Exception e) {
             infoText.setText("Ошибка\n" + e.getMessage());
         }

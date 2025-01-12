@@ -1,7 +1,8 @@
-package org.example.spotifyexchangeregion;
+package org.example.spotifyexchangeregion.parsing;
 
-import org.example.spotifyexchangeregion.parsing.Parsing;
+import org.example.spotifyexchangeregion.models.Account;
 import org.example.spotifyexchangeregion.secrets.Secrets;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,15 +14,19 @@ class ParsingTest {
         parsing = new Parsing("https://accounts.spotify.com/ru/login");
     }
 
+    @AfterAll
+    static void tearDown() {
+        parsing.close();
+    }
+
     @Test
     void changeRegion() {
         Secrets.Initialize();
         Secrets.load();
-        String login = Secrets.get("login");
-        String password = Secrets.get("password");
+        Account account = new Account(Secrets.get("login"), Secrets.get("password"));
         try {
-            parsing.changeRegion(login, password);
-            Thread.sleep(10000);
+            parsing.changeRegion(account);
+            Thread.sleep(100000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
