@@ -11,7 +11,7 @@ class ParsingTest {
 
     @BeforeAll
     static void setUp() {
-        parsing = new Parsing("https://accounts.spotify.com/ru/login");
+        parsing = new Parsing("USA");
     }
 
     @AfterAll
@@ -26,7 +26,7 @@ class ParsingTest {
         Account account = new Account(Secrets.get("login"), Secrets.get("password"));
         try {
             parsing.changeRegion(account);
-            Thread.sleep(100000);
+            Thread.sleep(3000000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

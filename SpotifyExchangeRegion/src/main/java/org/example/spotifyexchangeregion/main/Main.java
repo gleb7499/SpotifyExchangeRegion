@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class Main extends Application {
     public static void changeRegion(Account account) {
-        try (final Parsing parsing = new Parsing("https://www.spotify.com/us/account/overview/")) {
+        try (final Parsing parsing = new Parsing("USA")) {
             parsing.changeRegion(account);
         } catch (Exception e) {
             throw new RuntimeException(e);

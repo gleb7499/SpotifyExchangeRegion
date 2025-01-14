@@ -11,24 +11,20 @@ import java.util.Set;
 public class CookieSpotify {
     private final WebDriver driver;
     private Set<Cookie> cookies;
-    private final boolean IS_FIRST;
 
-    public boolean IS_FIRST() {
-        return IS_FIRST;
-    }
+    public final boolean IS_FIRST_LAUNCH;
 
     private final File file;
-
     private final static String FILE_NAME = "cookies.data";
 
     {
         Path path = Path.of(FILE_NAME);
         try {
             if (Files.notExists(path)) {
-                IS_FIRST = true;
+                IS_FIRST_LAUNCH = true;
                 file = Files.createFile(path).toFile();
             } else {
-                IS_FIRST = false;
+                IS_FIRST_LAUNCH = false;
                 file = path.toFile();
             }
         } catch (Exception e) {
@@ -41,7 +37,7 @@ public class CookieSpotify {
     }
 
     public boolean setCookie() {
-        if (!IS_FIRST) {
+        if (!IS_FIRST_LAUNCH) {
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
                 cookies = (Set<Cookie>) ois.readObject();
@@ -61,7 +57,7 @@ public class CookieSpotify {
     }
 
     public void saveCookie() {
-        if (IS_FIRST) {
+        if (IS_FIRST_LAUNCH) {
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
                 cookies = driver.manage().getCookies();
