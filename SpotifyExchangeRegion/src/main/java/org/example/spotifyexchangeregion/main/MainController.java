@@ -1,11 +1,14 @@
 package org.example.spotifyexchangeregion.main;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.example.spotifyexchangeregion.models.Account;
 
 public class MainController {
+    @FXML
+    private Button exchangeButton;
     @FXML
     private Label infoText;
     @FXML
@@ -14,15 +17,18 @@ public class MainController {
     private TextField passwordField;
 
     private Account account;
+    private final static String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
     @FXML
     private void onExchangeButtonClick() {
+        exchangeButton.setDisable(true);
         setAccount();
         if (checkDataFromField()) {
             startExchange();
         } else {
             infoText.setText("Некорректные данные!");
         }
+        exchangeButton.setDisable(false);
     }
 
     public void setAccount() {
@@ -30,8 +36,7 @@ public class MainController {
     }
 
     public boolean checkDataFromField() {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return account.getLogin().matches(emailRegex) && account.getPassword().length() >= 8;
+        return account.getLogin().matches(EMAIL_REGEX) && account.getPassword().length() >= 8;
     }
 
     private void startExchange() {

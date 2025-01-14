@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -21,16 +22,15 @@ public class Parsing implements AutoCloseable {
     private final WebDriver driver;
     private final WebDriverWait wait;
     private final CookieSpotify cookieSpotify;
+    private final String region;
 
     private final static String url = "https://www.spotify.com/us/account/overview/";
 
     public Parsing(String region) {
         driver = new ChromeDriver(new ChromeOptions().addExtensions(new File("3.2.1_0.crx")));
         wait = new WebDriverWait(driver, of(15, SECONDS));
-        setVPN(region);
-        driver.get(url);
         cookieSpotify = new CookieSpotify(driver);
-        setCookie();
+        this.region = region;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Parsing implements AutoCloseable {
         driver.quit();
     }
 
-    private void setVPN(String region) {
+    private void setVPN() {
         driver.get("chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/src/popup/popup.html");
         while ("Extension".equals(driver.getTitle())) {
             Set<String> windowHandles = driver.getWindowHandles();
@@ -66,6 +66,8 @@ public class Parsing implements AutoCloseable {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#root > div.navigation-layout.fullheight > div > main > div.main-view__inner > div > div.main-view__connect > button"))).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".connect-button.connect-button--connected")));
+
+        driver.get(url);
     }
 
     private void setCookie() {
@@ -75,18 +77,26 @@ public class Parsing implements AutoCloseable {
     }
 
     public void changeRegion(Account account) {
+        driver.get(url);
+        setCookie();
         if (cookieSpotify.IS_FIRST_LAUNCH) {
+            setVPN();
             login(account);
+        } else {
+            change("BY");
+            // Ждем, пока сообщение о смене региона не появится
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#__next > div.encore-layout-themes.encore-dark-theme > div > div.sc-85f631f4-0.bihHnb > div.sc-bc5846-0.jxcVMq > section > div")));
+            setVPN();
+            change("US");
         }
-        change();
     }
 
-    private void change() {
-        driver.findElement(By.cssSelector("#account-settings-link")).click();
-        driver.findElement(By.cssSelector("#menu-group-account > div:nth-child(3) > a")).click();
-        WebElement country = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#country")));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", country);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", country);
+    private void change(String region) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#menu-group-account > div:nth-child(3) > a"))).click();
+        Select countries = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#country"))));
+        countries.selectByValue(region);
+        WebElement submit = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#__next > div.encore-layout-themes.encore-dark-theme > div > div.sc-85f631f4-0.bihHnb > div.sc-bc5846-0.jxcVMq > article > section > form > div > button")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submit);
     }
 
     private void login(@NotNull Account account) {

@@ -26,7 +26,6 @@ class ParsingTest {
         Account account = new Account(Secrets.get("login"), Secrets.get("password"));
         try {
             parsing.changeRegion(account);
-            Thread.sleep(3000000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

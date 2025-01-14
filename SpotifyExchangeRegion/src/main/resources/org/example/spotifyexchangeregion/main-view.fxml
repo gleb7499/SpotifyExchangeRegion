@@ -22,7 +22,7 @@
       <font>
          <Font size="14.0" />
       </font></PasswordField>
-    <Button onAction="#onExchangeButtonClick" style="-fx-background-color: #717171;" text="Запустить" textAlignment="CENTER" textFill="WHITE">
+    <Button fx:id="exchangeButton" onAction="#onExchangeButtonClick" style="-fx-background-color: #717171;" text="Запустить" textAlignment="CENTER" textFill="WHITE">
       <font>
          <Font size="14.0" />
       </font></Button>

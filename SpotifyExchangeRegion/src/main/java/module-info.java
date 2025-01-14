@@ -10,7 +10,11 @@ module org.example.spotifyexchangeregion {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires org.seleniumhq.selenium.api;
+    requires org.jetbrains.annotations;
+    requires org.seleniumhq.selenium.chrome_driver;
+    requires org.seleniumhq.selenium.support;
 
-    opens org.example.spotifyexchangeregion to javafx.fxml;
-    exports org.example.spotifyexchangeregion;
+    opens org.example.spotifyexchangeregion.main to javafx.fxml;
+    exports org.example.spotifyexchangeregion.main;
 }
