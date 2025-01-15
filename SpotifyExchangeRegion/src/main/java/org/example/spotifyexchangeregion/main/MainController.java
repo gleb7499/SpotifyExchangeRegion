@@ -21,14 +21,14 @@ public class MainController {
 
     @FXML
     private void onExchangeButtonClick() {
-        exchangeButton.setDisable(true);
+        exchangeButton.setDisable(false);
         setAccount();
         if (checkDataFromField()) {
-            startExchange();
+            new Thread(this::startExchange).start();
         } else {
             infoText.setText("Некорректные данные!");
         }
-        exchangeButton.setDisable(false);
+        exchangeButton.setDisable(true);
     }
 
     public void setAccount() {
@@ -36,7 +36,7 @@ public class MainController {
     }
 
     public boolean checkDataFromField() {
-        return account.getLogin().matches(EMAIL_REGEX) && account.getPassword().length() >= 8;
+        return account.login().matches(EMAIL_REGEX) && account.password().length() >= 8;
     }
 
     private void startExchange() {

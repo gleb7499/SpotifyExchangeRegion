@@ -84,11 +84,9 @@ public class Parsing implements AutoCloseable {
             login(account);
         } else {
             change("BY");
-            // Ждем, пока сообщение о смене региона не появится
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#__next > div.encore-layout-themes.encore-dark-theme > div > div.sc-85f631f4-0.bihHnb > div.sc-bc5846-0.jxcVMq > section > div")));
             setVPN();
-            change("US");
         }
+        change("US");
     }
 
     private void change(String region) {
@@ -97,13 +95,15 @@ public class Parsing implements AutoCloseable {
         countries.selectByValue(region);
         WebElement submit = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#__next > div.encore-layout-themes.encore-dark-theme > div > div.sc-85f631f4-0.bihHnb > div.sc-bc5846-0.jxcVMq > article > section > form > div > button")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submit);
+        // Ждем, пока сообщение о смене региона не появится
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#__next > div.encore-layout-themes.encore-dark-theme > div > div.sc-85f631f4-0.bihHnb > div.sc-bc5846-0.jxcVMq > section > div")));
     }
 
     private void login(@NotNull Account account) {
         WebElement loginInput = driver.findElement(By.id("login-username"));
         WebElement passwordInput = driver.findElement(By.id("login-password"));
-        loginInput.sendKeys(account.getLogin());
-        passwordInput.sendKeys(account.getPassword());
+        loginInput.sendKeys(account.login());
+        passwordInput.sendKeys(account.password());
         driver.findElement(By.id("login-button")).click();
     }
 }

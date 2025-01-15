@@ -14,6 +14,7 @@ module org.example.spotifyexchangeregion {
     requires org.jetbrains.annotations;
     requires org.seleniumhq.selenium.chrome_driver;
     requires org.seleniumhq.selenium.support;
+    requires dev.failsafe.core;
 
     opens org.example.spotifyexchangeregion.main to javafx.fxml;
     exports org.example.spotifyexchangeregion.main;
