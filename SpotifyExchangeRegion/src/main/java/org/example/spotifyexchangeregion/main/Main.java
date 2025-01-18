@@ -11,8 +11,8 @@ import java.io.IOException;
 
 public class Main extends Application {
     public static void changeRegion(Account account) {
-        try (final Parsing parsing = new Parsing("USA")) {
-            parsing.changeRegion(account);
+        try (final Parsing parsing = new Parsing(account)) {
+            parsing.changeRegion("USA");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,8 @@
 package org.example.spotifyexchangeregion.parsing;
 
+import org.example.spotifyexchangeregion.models.Account;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
@@ -12,31 +15,39 @@ public class CookieSpotify {
     private final WebDriver driver;
     private Set<Cookie> cookies;
 
-    public final boolean IS_FIRST_LAUNCH;
+    public boolean IS_FIRST_LAUNCH;
 
-    private final File file;
-    private final static String FILE_NAME = "cookies.data";
+    private File file;
+    private String fileName;
+    private final static String DIRECTORY_NAME = "cookies";
 
-    {
-        Path path = Path.of(FILE_NAME);
+    @Contract(pure = true)
+    public CookieSpotify(WebDriver driver, @NotNull Account account) {
+        this.driver = driver;
+        fileName = account.login() + "_" + account.password().hashCode() + ".data";
+    }
+
+    private void openFile() {
+        Path path = Path.of(DIRECTORY_NAME);
         try {
             if (Files.notExists(path)) {
+                Files.createDirectories(path);
+            }
+            Path filePath = path.resolve(fileName);
+            if (Files.notExists(filePath)) {
+                file = Files.createFile(filePath).toFile();
                 IS_FIRST_LAUNCH = true;
-                file = Files.createFile(path).toFile();
             } else {
+                file = filePath.toFile();
                 IS_FIRST_LAUNCH = false;
-                file = path.toFile();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public CookieSpotify(WebDriver driver) {
-        this.driver = driver;
-    }
-
     public boolean setCookie() {
+        openFile();
         if (!IS_FIRST_LAUNCH) {
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
@@ -51,6 +62,7 @@ public class CookieSpotify {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            driver.navigate().refresh();
             return true;
         }
         return false;

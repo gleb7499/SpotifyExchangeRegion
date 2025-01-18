@@ -22,15 +22,15 @@ public class Parsing implements AutoCloseable {
     private final WebDriver driver;
     private final WebDriverWait wait;
     private final CookieSpotify cookieSpotify;
-    private final String region;
+    private final Account account;
 
     private final static String url = "https://www.spotify.com/us/account/overview/";
 
-    public Parsing(String region) {
+    public Parsing(Account account) {
         driver = new ChromeDriver(new ChromeOptions().addExtensions(new File("3.2.1_0.crx")));
         wait = new WebDriverWait(driver, of(15, SECONDS));
-        cookieSpotify = new CookieSpotify(driver);
-        this.region = region;
+        cookieSpotify = new CookieSpotify(driver, account);
+        this.account = account;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Parsing implements AutoCloseable {
         driver.quit();
     }
 
-    private void setVPN() {
+    private void setVPN(String region) {
         driver.get("chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/src/popup/popup.html");
         while ("Extension".equals(driver.getTitle())) {
             Set<String> windowHandles = driver.getWindowHandles();
@@ -70,21 +70,14 @@ public class Parsing implements AutoCloseable {
         driver.get(url);
     }
 
-    private void setCookie() {
-        if (cookieSpotify.setCookie()) {
-            driver.navigate().refresh();
-        }
-    }
-
-    public void changeRegion(Account account) {
+    public void changeRegion(String region) {
         driver.get(url);
-        setCookie();
-        if (cookieSpotify.IS_FIRST_LAUNCH) {
-            setVPN();
+        if (cookieSpotify.setCookie()) {
+            setVPN(region);
             login(account);
         } else {
             change("BY");
-            setVPN();
+            setVPN(region);
         }
         change("US");
     }

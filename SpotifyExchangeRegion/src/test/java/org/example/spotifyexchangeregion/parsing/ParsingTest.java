@@ -11,7 +11,10 @@ class ParsingTest {
 
     @BeforeAll
     static void setUp() {
-        parsing = new Parsing("USA");
+        Secrets.Initialize();
+        Secrets.load();
+        Account account = new Account(Secrets.get("login"), Secrets.get("password"));
+        parsing = new Parsing(account);
     }
 
     @AfterAll
@@ -21,11 +24,8 @@ class ParsingTest {
 
     @Test
     public void changeRegion() {
-        Secrets.Initialize();
-        Secrets.load();
-        Account account = new Account(Secrets.get("login"), Secrets.get("password"));
         try {
-            parsing.changeRegion(account);
+            parsing.changeRegion("USA");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
