@@ -20,7 +20,7 @@ class ParsingTest {
     }
 
     @Test
-    void changeRegion() {
+    public void changeRegion() {
         Secrets.Initialize();
         Secrets.load();
         Account account = new Account(Secrets.get("login"), Secrets.get("password"));

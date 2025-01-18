@@ -1,72 +1,57 @@
 package org.example.spotifyexchangeregion.main;
 
-import javafx.application.Platform;
-import javafx.scene.control.TextField;
+import org.example.spotifyexchangeregion.models.Account;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 class MainControllerTest {
 
     @Mock
-    private TextField loginField;
-
-    @Mock
-    private TextField passwordField;
+    private Account account;
 
     @InjectMocks
     private MainController mainController;
 
-    /**
-     * Инициализация Toolkit для использования JavaFX-компонентов в JUnit-тестах.
-     * <p>
-     * JUnit-тесты запускаются не в потоке АРТ, а в отдельном потоке, поэтому для использования
-     * JavaFX-компонентов необходимо explicit-инициализировать Toolkit. Это делается
-     * с помощью Platform.startup(Runnable), который инициализирует Toolkit.
-     * <p>
-     * Это необходимо, потому что в MainController используется JavaFX-компонент TextField,
-     * который использует Toolkit.
-     */
-    @BeforeAll
-    public static void initToolkit() {
-        Platform.startup(() -> {
-        });
+    private AutoCloseable autoCloseable;
+
+    @BeforeEach
+    public void setUp() {
+        autoCloseable = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        autoCloseable.close();
     }
 
     @Test
-    void testCheckDataFromField_InvalidEmail() {
-        when(loginField.getText()).thenReturn("invalid-email");
-        when(passwordField.getText()).thenReturn("password123");
-
-        mainController.setAccount();
-
+    public void testCheckDataFromField_InvalidEmail() {
+        lenient().when(account.login()).thenReturn("invalid-email");
+        lenient().when(account.password()).thenReturn("password123");
         Assertions.assertFalse(mainController.checkDataFromField());
     }
 
     @Test
-    void testCheckDataFromField_InvalidPassword() {
-        when(loginField.getText()).thenReturn("test@test.com");
-        when(passwordField.getText()).thenReturn("short");
-
-        mainController.setAccount();
-
+    public void testCheckDataFromField_InvalidPassword() {
+        lenient().when(account.login()).thenReturn("test@test.com");
+        lenient().when(account.password()).thenReturn("short");
         Assertions.assertFalse(mainController.checkDataFromField());
     }
 
     @Test
-    void testCheckDataFromField_ValidData() {
-        when(loginField.getText()).thenReturn("test@test.com");
-        when(passwordField.getText()).thenReturn("password123");
-
-        mainController.setAccount();
-
+    public void testCheckDataFromField_ValidData() {
+        lenient().when(account.login()).thenReturn("test@test.com");
+        lenient().when(account.password()).thenReturn("password123");
         Assertions.assertTrue(mainController.checkDataFromField());
     }
 }
