@@ -1,7 +1,6 @@
 package org.example.spotifyexchangeregion.parsing;
 
 import org.example.spotifyexchangeregion.models.Account;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -28,7 +27,7 @@ public class Parsing implements AutoCloseable {
 
     public Parsing(Account account) {
         driver = new ChromeDriver(new ChromeOptions().addExtensions(new File("3.2.1_0.crx")));
-        wait = new WebDriverWait(driver, of(15, SECONDS));
+        wait = new WebDriverWait(driver, of(25, SECONDS));
         cookieSpotify = new CookieSpotify(driver, account);
         this.account = account;
     }
@@ -73,9 +72,10 @@ public class Parsing implements AutoCloseable {
     public void changeRegion(String region) {
         driver.get(url);
         if (cookieSpotify.setCookie()) {
+            driver.navigate().refresh();
             setVPN(region);
-            login(account);
         } else {
+            login();
             change("BY");
             setVPN(region);
         }
@@ -92,7 +92,7 @@ public class Parsing implements AutoCloseable {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#__next > div.encore-layout-themes.encore-dark-theme > div > div.sc-85f631f4-0.bihHnb > div.sc-bc5846-0.jxcVMq > section > div")));
     }
 
-    private void login(@NotNull Account account) {
+    private void login() {
         WebElement loginInput = driver.findElement(By.id("login-username"));
         WebElement passwordInput = driver.findElement(By.id("login-password"));
         loginInput.sendKeys(account.login());

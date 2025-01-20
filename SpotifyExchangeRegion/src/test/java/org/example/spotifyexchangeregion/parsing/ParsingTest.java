@@ -13,8 +13,7 @@ class ParsingTest {
     static void setUp() {
         Secrets.Initialize();
         Secrets.load();
-        Account account = new Account(Secrets.get("login"), Secrets.get("password"));
-        parsing = new Parsing(account);
+        parsing = new Parsing( new Account(Secrets.get("login"), Secrets.get("password")));
     }
 
     @AfterAll

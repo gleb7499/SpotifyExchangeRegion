@@ -24,7 +24,7 @@ public class CookieSpotify {
     @Contract(pure = true)
     public CookieSpotify(WebDriver driver, @NotNull Account account) {
         this.driver = driver;
-        fileName = account.login() + "_" + account.password().hashCode() + ".data";
+        fileName = account.login() + "_" + account.password().hashCode();
     }
 
     private void openFile() {
@@ -33,7 +33,7 @@ public class CookieSpotify {
             if (Files.notExists(path)) {
                 Files.createDirectories(path);
             }
-            Path filePath = path.resolve(fileName);
+            Path filePath = path.resolve(fileName + ".data");
             if (Files.notExists(filePath)) {
                 file = Files.createFile(filePath).toFile();
                 IS_FIRST_LAUNCH = true;
@@ -52,7 +52,7 @@ public class CookieSpotify {
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
                 cookies = (Set<Cookie>) ois.readObject();
-                for (Cookie cookie : cookies) {
+                for (final Cookie cookie : cookies) {
                     try {
                         driver.manage().addCookie(cookie);
                     } catch (Exception e) {
@@ -62,7 +62,6 @@ public class CookieSpotify {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            driver.navigate().refresh();
             return true;
         }
         return false;
@@ -77,6 +76,19 @@ public class CookieSpotify {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public void readDataAndWriteTxt() {
+        try (BufferedReader br = new BufferedReader(new FileReader(DIRECTORY_NAME + "/" + fileName + ".data"));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(DIRECTORY_NAME + "/" + fileName + ".txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                bw.write(line);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

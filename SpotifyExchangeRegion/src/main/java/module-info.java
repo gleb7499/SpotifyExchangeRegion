@@ -18,4 +18,5 @@ module org.example.spotifyexchangeregion {
 
     opens org.example.spotifyexchangeregion.main to javafx.fxml;
     exports org.example.spotifyexchangeregion.main;
+    exports org.example.spotifyexchangeregion.models;
 }
