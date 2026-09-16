@@ -1,79 +1,58 @@
-# SpotifyExchangeRegion
+# Spotify Exchange Region
 
-Desktop app that automates changing the region of a Spotify account via a desktop Chrome browser controlled with Selenium.
+A personal Java/JavaFX automation I built to simplify a repetitive Spotify account maintenance workflow. The tool controls a desktop Chrome session through Selenium and uses a VPN browser extension to reach the account settings flow from a selected region.
 
-Spotify ties your account region to your payment method and current location. This tool logs into your Spotify account in a browser, routes traffic through a VPN Chrome extension, and switches the account country through the official account settings page — all automated.
+## The problem
 
-> **Disclaimer:** this project is for educational purposes. Automating Spotify's web UI may violate Spotify's Terms of Service. Use at your own risk.
+Changing the country associated with a Spotify account can require repeating the same browser steps: launch a suitable connection, authenticate, open the account settings, select the new country, and confirm the change. Repeating that flow manually is slow and easy to get wrong.
 
-## How it works
+## The solution
 
-1. Launches Chrome via Selenium WebDriver with a VPN extension (`3.2.1_0.crx`) loaded.
-2. On first launch: runs VPN onboarding, connects to a chosen region (USA by default), logs into Spotify with your credentials.
-3. Saves session cookies to `cookies.data` so subsequent runs skip the login.
-4. Changes the account country on the [Spotify account overview](https://www.spotify.com/us/account/overview/) page (BY → US flow), confirming the change.
+This desktop utility packages the workflow into a small JavaFX application. It starts Chrome with the configured VPN extension, performs the login flow, stores the browser session locally, and automates the country-selection steps on Spotify's official account page.
 
-## Tech stack
+The tool is intentionally personal and local: credentials are entered into the automated browser session, cookies stay in a local gitignored file, and no account data is sent to a separate service.
+
+## Technology
 
 - Java 23
-- JavaFX (UI) + FXML
-- Selenium WebDriver (browser automation)
-- JUnit 5 + Mockito (tests)
+- JavaFX and FXML
+- Selenium WebDriver
+- JUnit 5 and Mockito
 - Maven
 
-## Prerequisites
+## Requirements
 
-- JDK 23
-- Maven (or use the included Maven Wrapper: `mvnw` / `mvnw.cmd`)
-- Chrome browser installed
-- ChromeDriver matching your Chrome version, available on `PATH`
-- A VPN Chrome extension packaged as `3.2.1_0.crx`, placed in the project root (`SpotifyExchangeRegion/`) — the region is set through this extension
+- JDK 23;
+- Maven or the included Maven Wrapper;
+- Chrome and a matching ChromeDriver on `PATH`;
+- the packaged VPN extension `3.2.1_0.crx` in the project root.
 
-## Running
+## Run
 
 ```bash
-cd SpotifyExchangeRegion
 ./mvnw clean javafx:run
 ```
 
 On Windows:
 
 ```cmd
-cd SpotifyExchangeRegion
 mvnw.cmd clean javafx:run
 ```
 
-Enter your Spotify account email and password in the window and press the exchange button.
+Enter the account credentials in the local application window and select the target region.
 
-## Testing
+## Test
 
 ```bash
-cd SpotifyExchangeRegion
 ./mvnw test
 ```
 
-## Project structure
+## Security and operational notes
 
-```
-SpotifyExchangeRegion/
-├── src/main/java/org/example/spotifyexchangeregion/
-│   ├── main/          # JavaFX entry point and controller
-│   ├── models/        # Account record (login, password)
-│   └── parsing/       # Selenium automation and cookie persistence
-├── src/test/java/     # Unit tests
-└── pom.xml
-```
-
-## CI
-
-A GitHub Actions workflow (`.github/workflows/build.yml`) builds the project with JDK 23 and runs SonarCloud analysis on pushes and pull requests to `main`.
-
-## Security notes
-
-- Your password is only used to log into Spotify in the automated browser session; it is never sent anywhere else.
-- Session cookies are stored locally in `cookies.data` (gitignored). Delete this file to force a fresh login.
-- Do not commit real credentials or VPN extension keys.
+- `cookies.data` is local session state and is ignored by Git; delete it to force a new login.
+- Never commit credentials, cookies, VPN extension keys, or personal configuration.
+- Automating Spotify's web interface may violate Spotify's Terms of Service. This project is for personal and educational use; operate it only where permitted and at your own risk.
 
 ## License
 
-[MIT](LICENSE)
+This personal automation is available under the [Creative Commons Attribution-NonCommercial 4.0 International license](LICENSE). Attribution to Loginov Gleb is required; commercial use requires prior written permission.
